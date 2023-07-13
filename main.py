@@ -21,7 +21,7 @@ user_state = {}
 def admin_menu(message):
     user_ID = message.chat.id
     if check_admin_status(user_ID):
-        markup = types.ReplyKeyboardMarkup(row_width=1)
+        markup = types.ReplyKeyboardMarkup(row_width=True)
         item1 = types.KeyboardButton('Пошук по базі даних')
         item2 = types.KeyboardButton('Панель адміністратора')
         markup.add(item1, item2)
@@ -40,7 +40,7 @@ def search_database(message):
     elif check_user_in_database(user_ID):
         access_code = get_user_access_code(user_ID)
         if access_code:
-            update_usage_left(access_code)  # Обновление значения usage_left
+            update_usage_left(access_code)  
             update_usage_left_users(user_ID)
             bot.reply_to(message, "Введіть пошуковий запит")
             bot.reply_to(message, "Запит оброблюється")
@@ -140,8 +140,8 @@ def handle_access_key(message):
     if check_access_key(message.text):
         markup = types.ReplyKeyboardMarkup(row_width=True)
         item1 = types.KeyboardButton('Пошук по базі даних')
-        item4 = types.KeyboardButton('Статус ключа')
-        markup.add(item1, item4)
+        item2 = types.KeyboardButton('Статус ключа')
+        markup.add(item1, item2)
         event = f'Користувач {message.from_user.username} увійшов за допомогою ключа.'
         register_event(event)
         bot.reply_to(message, "Ви маєте доступ до бота", reply_markup=markup)
