@@ -6,6 +6,7 @@ from functions import*
 from security import*
 from db_functions import*
 from keys import*
+import requests
 
 config = configparser.ConfigParser()
 config.read('config.ini')
@@ -36,7 +37,28 @@ def search_database(message):
     user_ID = message.chat.id
     if check_admin_status(user_ID):
         bot.reply_to(message, "Введіть пошуковий запит")
-        bot.reply_to(message, "Запит оброблюється")
+         # Отправка запроса на API
+        url = 'http://localhost:51001'  # Замените на ваш адрес API
+        response = requests.post(url, data=payload)
+    
+    # Обработка ответа от API
+        if response.status_code == 200:
+            print('Данные успешно отправлены на API.')
+        # Получение названия файла из заголовка ответа
+            filename = response.headers.get('Content-Disposition').split('=')[1]
+        # Сохранение файла
+            with open(filename, 'wb') as file:
+                file.write(response.content)
+                print(f'Файл {filename} успешно сохранен.')
+        
+        # Отправка файла пользователю через Telegram
+            chat_id = user_id 
+            bot.send_document(chat_id=chat_id, document=open(filename, 'rb'))
+            print(f'Файл {filename} успешно отправлен пользователю.')
+        
+        else:
+            print(f'Ошибка при отправке данных на API. Код ошибки: {response.status_code}')
+            bot.reply_to(message, "Запит оброблюється")
     elif check_user_in_database(user_ID):
         access_code = get_user_access_code(user_ID)
         if access_code:
