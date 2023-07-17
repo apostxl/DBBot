@@ -2,6 +2,16 @@ import sqlite3
 import os
 from datetime import datetime
 from functions import generate_code
+import requests
+
+
+def request_to_database(user_id, data_list):
+    # Подготовка данных для отправки
+    payload = {
+        'user_id': user_id,
+        'data_list': data_list
+    }
+
 
 if not os.path.exists('database.db'):
     conn = sqlite3.connect('database.db')
