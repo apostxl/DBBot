@@ -34,7 +34,7 @@ def check_access_key(key):
         return False
 
 
-def check_user_in_database(user_id):
+def ccheck_access_key_by_user(user_id):
     conn = sqlite3.connect('database.db')
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM users WHERE user_id=?", (user_id,))
