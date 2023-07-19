@@ -21,9 +21,15 @@ def send_log_message(message):
     bot.send_message(LOG_CHAT_ID, message)
 
 def register_event(event):
-    timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    log_message = f'{timestamp} - {event}'
-    send_log_message(log_message)
+    logging.info(event)
+
+
+def send_and_update_log_file(file_path, user_ids):
+    while True:
+        with open(file_path, 'rb') as log_file:
+            for user_id in user_ids:
+                bot.send_document(user_id, log_file)
+        time.sleep(60)
 
 
 
